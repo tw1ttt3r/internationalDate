@@ -1,3 +1,1 @@
-const dates = document.querySelector('#dates');
-
-main(dates);
+console.log('exact---', new Date());

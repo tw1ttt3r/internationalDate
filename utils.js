@@ -1,19 +1,3 @@
-const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-];
-
-const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-
 function cleanElement(elem) {
     elem.value = '';
 }
@@ -22,8 +6,8 @@ function launchAlert(msg) {
     alert(msg);
 }
 
-function main(elem) {
-    elem.innerHTML = '<h1>HOlA MUNDO</h1>';
+function main(data, timeZone) {
+    document.querySelector('#dates').innerHTML = `<h1>(${timeZone}): ${data}</h1>`;
 }
 
 function stopbubling(e) {
@@ -69,17 +53,17 @@ function generar(e) {
 
 function createDate(hour) {
     const today = new Date();
-    console.log('year', today.getFullYear());
-    console.log('month', today.getMonth());
-    console.log('day', today.getDate());
-    const hora = hour.length === 4 ? hour.slice(0,2) : hour.slice(0,1)
-    console.log('hour', hora);
-    console.log('minutes', hour.slice(-2));
-    console.log('today---', today);
-    const newDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hora, hour.slice(-2));
-    console.log('newDay---', newDay);
-    console.log('locale---', newDay.toLocaleDateString('es-MX', options));
-    console.log('zonaHororia---', Intl.DateTimeFormat().resolvedOptions());
+    const hora = hour.length === 3 ? '0'+hour.slice(0,1) : hour.slice(0,2);
+    const DateTime = luxon.DateTime;
+    var specifyOffset = DateTime.fromISO(`${today.getFullYear()}-${today.getMonth() < 10 ? '0'+(today.getMonth()+1) : (today.getMonth()+1)}-${today.getDay()}T${hora}:${hour.slice(-2)}:00-05:00`, { zone: 'America/Mexico_City' });
+    console.log(specifyOffset.zoneName)
+    console.log(specifyOffset.toString())
+
+    const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
+
+    var rezoned = specifyOffset.setZone(timeZone);
+    console.log(rezoned.toString());
+    main(rezoned, timeZone);
 }
 
 function validateMilitarHour(hour) {
