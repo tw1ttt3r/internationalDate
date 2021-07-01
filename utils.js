@@ -55,14 +55,9 @@ function createDate(hour) {
     const today = new Date();
     const hora = hour.length === 3 ? '0'+hour.slice(0,1) : hour.slice(0,2);
     const DateTime = luxon.DateTime;
-    const specifyOffset = DateTime.fromISO(`${today.getFullYear()}-${today.getMonth() < 10 ? '0'+(today.getMonth()+1) : (today.getMonth()+1)}-${today.getDate()}T${hora}:${hour.slice(-2)}:00-05:00`, { zone: 'America/Mexico_City' });
-    console.log(specifyOffset.zoneName)
-    console.log(specifyOffset.toString())
-
+    const specifyOffset = DateTime.fromISO(`${today.getFullYear()}-${today.getMonth() < 10 ? '0'+(today.getMonth()+1) : (today.getMonth()+1)}-${today.getDate() < 10 ? '0'+today.getDate() : today.getDate()}T${hora}:${hour.slice(-2)}:00-05:00`, { zone: 'America/Mexico_City' });
     const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
-
     var rezoned = specifyOffset.setZone(timeZone);
-    console.log(rezoned.toString());
     main(rezoned, timeZone);
 }
 
